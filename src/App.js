@@ -1,6 +1,9 @@
 import { Layout, Dropdown, Menu, Button } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
+import "./App.css";
+import LoginForm from "./components/LoginForm";
+import HomePage from "./components/HomePage";
 
 const { Header, Content } = Layout;
 
@@ -9,7 +12,7 @@ const App = () => {
 
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
-    if (authToken !== undefined) {
+    if (authToken !== null) {
       setAuthed(true);
     }
   }, []);
@@ -32,18 +35,16 @@ const App = () => {
   // };
 
   const renderContent = () => {
-    // if (!this.state.authed) {
-    //   return <LoginPage handleLoginSuccess={this.handleLoginSuccess} />;
-    // }
-    // if (this.state.asHost) {
-    //   return <HostHomePage />;
-    // }
-    // return <GuestHomePage />;
+    if (!authed) {
+      return <LoginForm onLoginSuccess={() => setAuthed(true)} />;
+    }
+
+    return <HomePage />;
   };
 
   const userMenu = (
     <Menu>
-      <Menu.Item key="logout" onClick={this.handleLogOut}>
+      <Menu.Item key="logout" onClick={() => setAuthed(false)}>
         Log Out
       </Menu.Item>
     </Menu>
@@ -53,9 +54,9 @@ const App = () => {
     <Layout style={{ height: "100vh" }}>
       <Header style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ fontSize: 16, fontWeight: 600, color: "white" }}>
-          Stays Booking
+          App Store
         </div>
-        {this.state.authed && (
+        {authed && (
           <div>
             <Dropdown trigger="click" overlay={userMenu}>
               <Button icon={<UserOutlined />} shape="circle" />
