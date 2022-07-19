@@ -1,13 +1,23 @@
 import React, { useState } from "react";
-import { Form, Button, Input } from "antd";
+import { Form, Button, Input, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import SignupButton from "./SignupButton";
+import { login } from "../utils";
 
 const LoginForm = ({ onLoginSuccess }) => {
   const [loading, setLoading] = useState(false);
 
-  const handleFormSubmit = () => {
-    onLoginSuccess();
+  const handleFormSubmit = async (data) => {
+    setLoading(true);
+
+    try {
+      await login(data);
+      onLoginSuccess();
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -40,7 +50,12 @@ const LoginForm = ({ onLoginSuccess }) => {
           <Input.Password disabled={loading} placeholder="Password" />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+          <Button
+            loading={loading}
+            type="primary"
+            htmlType="submit"
+            style={{ width: "100%" }}
+          >
             Log in
           </Button>
           Or <SignupButton />

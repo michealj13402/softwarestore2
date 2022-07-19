@@ -1,14 +1,13 @@
 import { Layout, Dropdown, Menu, Button } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
-import "./App.css";
 import LoginForm from "./components/LoginForm";
 import HomePage from "./components/HomePage";
 
 const { Header, Content } = Layout;
 
 const App = () => {
-  const [authed, setAuthed] = useState(false);
+  const [authed, setAuthed] = useState();
 
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
@@ -17,26 +16,22 @@ const App = () => {
     }
   }, []);
 
-  // const handleLoginSuccess = (token, asHost) => {
-  //   localStorage.setItem("authToken", token);
-  //   localStorage.setItem("asHost", asHost);
-  //   this.setState({
-  //     authed: true,
-  //     asHost,
-  //   });
-  // };
+  const handleLoginSuccess = () => {
+    setAuthed(true);
+  };
 
-  // const handleLogOut = () => {
-  //   localStorage.removeItem("authToken");
-  //   localStorage.removeItem("asHost");
-  //   this.setState({
-  //     authed: false,
-  //   });
-  // };
+  const handleLogOut = () => {
+    localStorage.removeItem("authToken");
+    setAuthed(false);
+  };
 
   const renderContent = () => {
+    // if (authed === undefined) {
+    //   return <></>;
+    // }
+
     if (!authed) {
-      return <LoginForm onLoginSuccess={() => setAuthed(true)} />;
+      return <LoginForm onLoginSuccess={handleLoginSuccess} />;
     }
 
     return <HomePage />;
@@ -44,7 +39,7 @@ const App = () => {
 
   const userMenu = (
     <Menu>
-      <Menu.Item key="logout" onClick={() => setAuthed(false)}>
+      <Menu.Item key="logout" onClick={handleLogOut}>
         Log Out
       </Menu.Item>
     </Menu>
@@ -65,7 +60,7 @@ const App = () => {
         )}
       </Header>
       <Content
-        style={{ height: "calc(100% - 64px)", margin: 20, overflow: "auto" }}
+        style={{ height: "calc(100% - 64px)", padding: 20, overflow: "auto" }}
       >
         {renderContent()}
       </Content>

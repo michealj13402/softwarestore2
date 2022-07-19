@@ -1,6 +1,17 @@
-import { Button, Card, Form, Input, List, Tabs, Typography } from "antd";
-import { useState } from "react";
-import Checkout from "./Checkout";
+import {
+  Button,
+  Card,
+  Form,
+  Image,
+  Input,
+  List,
+  message,
+  Tabs,
+  Tooltip,
+  Typography,
+} from "antd";
+import { useEffect, useState } from "react";
+import { searchApps, checkout } from "../utils";
 import PostApps from "./PostApps";
 
 const { TabPane } = Tabs;
@@ -10,35 +21,29 @@ const BrowseApps = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
+  useEffect(() => {
+    handleSearch();
+  }, []);
+
   const handleSearch = async (query) => {
-    // this.setState({
-    //   loading: true,
-    // });
-    // try {
-    //   const resp = await searchStays(query);
-    //   this.setState({
-    //     data: resp,
-    //   });
-    // } catch (error) {
-    //   message.error(error.message);
-    // } finally {
-    //   this.setState({
-    //     loading: false,
-    //   });
-    // }
+    setLoading(true);
+    try {
+      const resp = await searchApps(query);
+      setData(resp);
+    } catch (error) {
+      message.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
       <Form onFinish={handleSearch} layout="inline">
-        <Form.Item label="Title" name="title" rules={[{ required: true }]}>
+        <Form.Item label="Title" name="title">
           <Input />
         </Form.Item>
-        <Form.Item
-          label="Description"
-          name="description"
-          rules={[{ required: true }]}
-        >
+        <Form.Item label="Description" name="description">
           <Input />
         </Form.Item>
         <Form.Item>
@@ -65,19 +70,24 @@ const BrowseApps = () => {
             <Card
               key={item.id}
               title={
-                <div style={{ display: "flex", alignItems: "center" }}>
+                <Tooltip title={item.description}>
                   <Text ellipsis={true} style={{ maxWidth: 150 }}>
-                    {item.name}
+                    {item.title}
                   </Text>
-                </div>
+                </Tooltip>
               }
-              extra={<></>}
+              extra={<Text type="secondary">${item.price}</Text>}
+              actions={[
+                <Button
+                  shape="round"
+                  type="primary"
+                  onClick={() => checkout(item.id)}
+                >
+                  Checkout
+                </Button>,
+              ]}
             >
-              {/* {item.images.map((image, index) => (
-                  <div key={index}>
-                    <Image src={image.url} width="100%" />
-                  </div>
-                ))} */}
+              <Image src={item.url} width="100%" />
             </Card>
           </List.Item>
         )}
