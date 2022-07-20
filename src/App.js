@@ -11,9 +11,7 @@ const App = () => {
 
   useEffect(() => {
     const authToken = localStorage.getItem("authToken");
-    if (authToken !== null) {
-      setAuthed(true);
-    }
+    setAuthed(authToken !== null);
   }, []);
 
   const handleLoginSuccess = () => {
@@ -26,9 +24,9 @@ const App = () => {
   };
 
   const renderContent = () => {
-    // if (authed === undefined) {
-    //   return <></>;
-    // }
+    if (authed === undefined) {
+      return <></>;
+    }
 
     if (!authed) {
       return <LoginForm onLoginSuccess={handleLoginSuccess} />;

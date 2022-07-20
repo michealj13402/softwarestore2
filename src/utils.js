@@ -1,4 +1,5 @@
-const domain = "https://hardy-thunder-354923.uc.r.appspot.com";
+// const domain = "https://hardy-thunder-354923.uc.r.appspot.com";
+const domain = "YOUR BACKEND SERVER";
 
 export const login = (credential) => {
   const url = `${domain}/signin`;
@@ -52,7 +53,7 @@ export const uploadApp = (data, file) => {
     headers: {
       Authorization: `Bearer ${authToken}`,
     },
-    body: data,
+    body: formData,
   }).then((response) => {
     if (response.status !== 200) {
       throw Error("Fail to upload app");
