@@ -1,5 +1,4 @@
-// const domain = "https://hardy-thunder-354923.uc.r.appspot.com";
-const domain = "YOUR BACKEND SERVER";
+const domain = "https://hardy-thunder-354923.uc.r.appspot.com";
 
 export const login = (credential) => {
   const url = `${domain}/signin`;
