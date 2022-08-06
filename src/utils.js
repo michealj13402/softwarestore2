@@ -9,7 +9,7 @@ export const login = (credential) => {
     },
     body: JSON.stringify(credential),
   })
-    .then((response) => {  
+    .then((response) => {
       if (!response.ok) {
         throw Error("Fail to log in");
       }
