@@ -9,8 +9,8 @@ export const login = (credential) => {
     },
     body: JSON.stringify(credential),
   })
-    .then((response) => {
-      if (response.status !== 200) {
+    .then((response) => {  
+      if (!response.ok()) {
         throw Error("Fail to log in");
       }
 
@@ -30,7 +30,7 @@ export const register = (credential) => {
     },
     body: JSON.stringify(credential),
   }).then((response) => {
-    if (response.status !== 200) {
+    if (!response.ok()) {
       throw Error("Fail to register");
     }
   });
@@ -54,7 +54,7 @@ export const uploadApp = (data, file) => {
     },
     body: formData,
   }).then((response) => {
-    if (response.status !== 200) {
+    if (!response.ok()) {
       throw Error("Fail to upload app");
     }
   });
@@ -74,7 +74,7 @@ export const searchApps = (query) => {
       Authorization: `Bearer ${authToken}`,
     },
   }).then((response) => {
-    if (response.status !== 200) {
+    if (!response.ok()) {
       throw Error("Fail to search apps");
     }
 
