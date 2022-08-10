@@ -29,7 +29,7 @@ const BrowseApps = () => {
     setLoading(true);
     try {
       const resp = await searchApps(query);
-      setData(resp);
+      setData(resp || []);
     } catch (error) {
       message.error(error.message);
     } finally {

@@ -1,5 +1,19 @@
 const domain = "https://hardy-thunder-354923.uc.r.appspot.com";
 
+const handleResponseStatus = (response, errMsg) => {
+  const { status, ok } = response;
+
+  if (status === 401) {
+    localStorage.removeItem("authToken");
+    window.location.reload();
+    return;
+  }
+
+  if (!ok) {
+    throw Error(errMsg);
+  }
+};
+
 export const login = (credential) => {
   const url = `${domain}/signin`;
   return fetch(url, {
@@ -30,9 +44,7 @@ export const register = (credential) => {
     },
     body: JSON.stringify(credential),
   }).then((response) => {
-    if (!response.ok) {
-      throw Error("Fail to register");
-    }
+    handleResponseStatus(response, "Fail to register");
   });
 };
 
@@ -54,9 +66,7 @@ export const uploadApp = (data, file) => {
     },
     body: formData,
   }).then((response) => {
-    if (!response.ok) {
-      throw Error("Fail to upload app");
-    }
+    handleResponseStatus(response, "Fail to upload app");
   });
 };
 
@@ -74,9 +84,7 @@ export const searchApps = (query) => {
       Authorization: `Bearer ${authToken}`,
     },
   }).then((response) => {
-    if (!response.ok) {
-      throw Error("Fail to search apps");
-    }
+    handleResponseStatus(response, "Fail to search apps");
 
     return response.json();
   });
@@ -93,5 +101,13 @@ export const checkout = (appId) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(appId),
-  });
+  })
+    .then((response) => {
+      handleResponseStatus(response, "Fail to checkout");
+
+      return response.text();
+    })
+    .then((redirectUrl) => {
+      window.location = redirectUrl;
+    });
 };
