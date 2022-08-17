@@ -92,7 +92,7 @@ export const searchApps = (query) => {
 
 export const checkout = (appId) => {
   const authToken = localStorage.getItem("authToken");
-  const url = `${domain}/checkout`;
+  const url = `${domain}/checkout?appID=${appId}`;
 
   return fetch(url, {
     method: "POST",
@@ -100,7 +100,6 @@ export const checkout = (appId) => {
       Authorization: `Bearer ${authToken}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(appId),
   })
     .then((response) => {
       handleResponseStatus(response, "Fail to checkout");
