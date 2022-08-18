@@ -51,7 +51,7 @@ const PostApps = () => {
         label="Price"
         rules={[{ required: true, type: "number", min: 0 }]}
       >
-        <InputNumber prefix="$" />
+        <InputNumber prefix="$" precision={2} />
       </Form.Item>
       <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
         <Button type="primary" htmlType="submit" loading={loading}>
